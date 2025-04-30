@@ -1,6 +1,6 @@
 from contradiction_detection.detector import ContradictionDetector
 
-API_KEY = "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"
+API_KEY = "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"
 # Replace with your own OpenAI API key
 
 # Example paragraphs for testing
