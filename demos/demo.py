@@ -13,7 +13,7 @@ Meanwhile, just last year, Erengrove was selected as one of the country's leadin
 """
 
 # Initialize the contradiction detector
-detector = ContradictionDetector()
+detector = ContradictionDetector(API_KEY)
 
 # Run the contradiction check
 result = detector.detect(text1, text2)
