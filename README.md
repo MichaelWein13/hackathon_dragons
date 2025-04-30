@@ -1,3 +1,3 @@
-# to be written later
+# To be written at end of Hackathon 
 Notes:
 1. Maybe should put in git.ignore so people don't what API key is
