@@ -24,7 +24,7 @@ Text 2:
 {text2.strip()}
 """
         response = openai.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o",
             messages=[{"role": "user", "content": prompt}],
             temperature=0,
             max_tokens=500
