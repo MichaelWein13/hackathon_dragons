@@ -1,0 +1,16 @@
+{
+    "name": "Wiki Fact Checker",
+    "version": "1.0.0",
+    "description": "Wikipedia Fact Checker",
+    "manifest_version": 3,
+    "author": "Hackathon Dragons",
+    "action":{
+        "default_popup": "index.html",
+        "default_title": "Wiki Fact Checker"
+    },
+    "permissions": ["webNavigation", "tabs"],
+    "host_permissions": ["<all_urls>"],
+    "background": {
+        "service_worker": "background.js"
+    }
+}
