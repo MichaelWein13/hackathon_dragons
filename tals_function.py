@@ -1,7 +1,11 @@
-from fetch_wiki_articles import fetch_wiki_full_text
+import time
+
+from tqdm import tqdm
+
+from fetch_wiki_articles import fetch_wiki_full_text_given_name, fetch_wiki_full_text_given_page
 from translate_text import translate_text
 
-languages = ["en", "fr", "de", "es", "it", "pt", "ru", "zh", "ja", "ko", "ar", "he"]
+languages = ["ru", "de", "ja", "he", "ar", "en", "fr", "es"]
 
 def split_utl(url):
     # return the article tile and the language
@@ -17,18 +21,26 @@ def split_utl(url):
     return article_title, language
 
 def tals_function(url):
+    """
+    This function takes a Wikipedia URL, extracts the articles and translates them into english.
+    :param url: the wikipedia URL
+    :return: the original language, the articles in english and the urls of the articles
+    """
     article_title, original_language = split_utl(url)
+    original_language_page = None
 
     wiki_articles_in_english = {}
     wiki_urls = {}
 
-    for lang in languages:
-        if lang in original_language:
-            article_name_in_lang = article_title
+    # Reorder languages to start with the original language
+    modified_languages = [original_language] + [lang for lang in languages if lang != original_language]
+    for lang in tqdm(modified_languages):
+        if lang == original_language:
+            article_text_in_lang, lang_url, page = fetch_wiki_full_text_given_name(article_title, lang)
+            original_language_page = page
         else:
-            article_name_in_lang = translate_text(article_title, original_language, lang)
+            article_text_in_lang, lang_url = fetch_wiki_full_text_given_page(original_language_page.langlinks.get(lang))
 
-        article_text_in_lang, lang_url = fetch_wiki_full_text(article_name_in_lang, lang)
         wiki_urls[lang] = lang_url
 
         if lang == "en":
@@ -42,8 +54,8 @@ def tals_function(url):
 
 
 if __name__ == '__main__':
-    tals_function("https://en.wikipedia.org/wiki/Six-Day_War")
-
+    original_language, wiki_articles_in_english, wiki_urls = tals_function("https://en.wikipedia.org/wiki/Six-Day_War")
+    pass
 
 
 
