@@ -3,8 +3,8 @@ import requests
 import json
 import trafilatura
 
-OPENAI_API_KEY = "put_somethinig_here"  # Your actual key
-EXA_API_KEY = "put_somethinig_here"  # Your actual key
+OPENAI_API_KEY = "PLACE_API_KEY"  # Your actual key
+EXA_API_KEY = "PLACE_API_KEY"  # Your actual key
 
 # Exa API settings
 EXA_SEARCH_URL = "https://api.exa.ai/search"
@@ -86,11 +86,12 @@ def fetch_and_summarize(url):
     Returns "Summary invalid - hello!" if the page isn't suitable for summarizing.
     """
     try:
-        response = requests.get(url, timeout=10)
+        response = requests.get(url, timeout=0.1)
         response.raise_for_status()
         article_text = trafilatura.extract(response.text)
 
         if not article_text or len(article_text.strip()) < 100:
+            print('hey237593')
             return "Summary invalid"
 
         # Ask GPT to summarize
@@ -110,15 +111,15 @@ Article:
         )
         summary = completion.choices[0].message.content.strip()
 
-        # Check if the response is a valid summary
+         #Check if the response is a valid summary
         if not check_if_summary(summary):
-            # print("hey2: detected invalid summary")
+            print("hey2: detected invalid summary")
             return "Summary invalid"
 
         return summary
 
     except Exception as e:
-        # print(f"hey3: error during fetch/summarize - {e}")
+        #print(f"hey3: error during fetch/summarize - {e}")
         return "Summary invalid"
 
 
@@ -140,7 +141,11 @@ Return the result as JSON like:
         messages=[{"role": "user", "content": prompt}],
         temperature=0.4,
     )
-    return json.loads(response.choices[0].message.content)
+    try:
+        claims = json.loads(response.choices[0].message.content)
+    except json.JSONDecodeError as e:
+        claims = None  # Or handle accordingly
+    return claims
 
 
 def search_exa(query, num_results=8):
@@ -157,9 +162,10 @@ def search_exa(query, num_results=8):
     for r in results:
         if any(domain in r["url"] for domain in REPUTABLE_DOMAINS):
             try:
+                print(r)
                 summary = fetch_and_summarize(r["url"])
                 if summary == "Summary invalid":
-                    continue  # Skip this result if summary is unavailable
+                    continue
                 r["summary"] = summary
                 filtered.append({
                     "title": r["title"],
@@ -167,47 +173,42 @@ def search_exa(query, num_results=8):
                     "domain": r["url"].split("/")[2],
                     "summary": r["summary"]
                 })
-            except Exception as e:
-                r["summary"] = f"Summary unavailable. Error: {str(e)}"
-                continue  # Skip this result in case of error
+                break  # Stop after first valid summary
+            except Exception:
+                continue
     return filtered
 
 
 def investigate_contradiction(contradiction_list):
-    results = []
+    all_articles = []
+    seen_articles = set()  # to store unique article identifiers (e.g., URLs)
 
     for contradiction_text in contradiction_list:
-        # print(f"Extracting claims from contradiction: {contradiction_text}")
-
-        # Extract the claims from the contradiction text
         claims = extract_claims(contradiction_text)
+        if not claims:
+            continue
 
-        # print(f"Searching for: {claims['claim_1']}")
-        results1 = search_exa(claims["claim_1"])
+        # Search for articles
+        articles_1 = search_exa(claims["claim_1"])
+        articles_2 = search_exa(claims["claim_2"])
 
-        # print(f"Searching for: {claims['claim_2']}")
-        results2 = search_exa(claims["claim_2"])
+        # Combine and filter articles by uniqueness
+        for article in articles_1 + articles_2:
+            article_id = article.get("url") or article.get("id")  # use a unique key
+            if article_id and article_id not in seen_articles:
+                seen_articles.add(article_id)
+                all_articles.append(article)
 
-        results.append({
-            "claim_1": {
-                "text": claims["claim_1"],
-                "sources": results1
-            },
-            "claim_2": {
-                "text": claims["claim_2"],
-                "sources": results2
-            }
-        })
-
-    return results
+    return all_articles
 
 
 # === Example test ===
 if __name__ == "__main__":
     contradiction_input = [
-        '- Contradiction: The claim about the D-Notice.\n  - Text 1: "The producers allege that the story was prevented from being told in 1971 because of a D-Notice, to protect a prominent member of the British royal family."\n  - Text 2: "There have been several rumours connected with the burglary, including one that the government issued a D-Notice to censor the press... There is no evidence to support these claims and they have been widely dismissed."',
-        '- Contradiction: The claim about the film\'s inspiration.\n  - Text 1: "According to the producers, this film is intended to reveal the truth for the first time, although it apparently includes significant elements of fiction."\n  - Text 2: "Some of the rumours inspired the story for the 2008 film The Bank Job."'
+        'Fruits are good for you',
+        'Fruits are bad for you'
     ]
 
     results = investigate_contradiction(contradiction_input)
+    print(results)
     print(json.dumps(results, indent=2))
