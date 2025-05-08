@@ -19,6 +19,7 @@ MultiWikiCheck automates the process of comparing Wikipedia articles across lang
 - Aligning sections and sentences across versions
 - Detecting contradictions, or inconsistencies
 - Suggesting related sources or articles to help users explore flagged issues further
+- Summarize those related sources
 
 ## 🧠 Technical Overview
 
