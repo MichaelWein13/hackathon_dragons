@@ -17,7 +17,7 @@ MultiWikiCheck automates the process of comparing Wikipedia articles across lang
 
 - Translating articles into a common language
 - Aligning sections and sentences across versions
-- Detecting contradictions, omissions, or inconsistencies
+- Detecting contradictions, or inconsistencies
 - Suggesting related sources or articles to help users explore flagged issues further
 
 ## 🧠 Technical Overview
@@ -26,7 +26,6 @@ The core of **MultiWikiCheck** is a multilingual analysis pipeline that performs
 
 1. **Data Collection**: Fetch articles on the same topic in different languages using the Wikipedia API.
 2. **Translation & Normalization**: Translate all content into a pivot language (e.g., English) using a translation model or API.
-3. **Semantic Alignment**: Match sentences and sections across versions using NLP techniques (e.g., sentence embedding, similarity scoring).
-4. **Discrepancy Detection**: Identify contradictions and missing information using rule-based and ML models.
-5. **Source Recommendation**: When inconsistencies are found, suggest other articles or sources that cover those gaps.
+3. **Discrepancy Detection**: Identify contradictions and missing information using rule-based and ML models.
+4. **Source Recommendation**: When inconsistencies are found, suggest other articles or sources that cover those gaps, and summarize them.
 
