@@ -1,15 +1,6 @@
 import wikipediaapi
 
-def main():
-    wiki_article_name = "Six-Day_War"
-    print(f"Fetching article: {wiki_article_name}")
-
-    article_text = fetch_wiki_full_text(wiki_article_name, "en")
-
-    print(article_text)
-
-
-def fetch_wiki_full_text(article_name, article_language):
+def fetch_wiki_full_text(article_name: str, article_language:str) -> str:
     """
     Fetch the full text of a Wikipedia article.
     :param article_name: The name of the Wikipedia article.
@@ -27,6 +18,11 @@ def fetch_wiki_full_text(article_name, article_language):
 
     return page.text
 
+def main():
+    wiki_article_name = "Six-Day_War"
+    print(f"Fetching article: {wiki_article_name}")
+    article_text = fetch_wiki_full_text(wiki_article_name, "en")
+    print(article_text)
 
 if __name__ == '__main__':
     main()
