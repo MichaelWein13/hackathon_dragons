@@ -5,7 +5,7 @@ from tqdm import tqdm
 from fetch_wiki_articles import fetch_wiki_full_text_given_name, fetch_wiki_full_text_given_page
 from translate_text import translate_text
 
-languages = ["ru", "de", "ja", "he", "ar", "en", "fr", "es"]
+languages = ["it", "sv", "fa", "ur", "hi", "pt", "ru", "de", "ja", "he", "ar", "en", "fr", "es"]
 
 def split_utl(url):
     # return the article tile and the language
