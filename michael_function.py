@@ -2,13 +2,9 @@ from openai import OpenAI
 import requests
 import json
 import trafilatura
-from dotenv import load_dotenv
-import os
 
-load_dotenv()
-
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-EXA_API_KEY = os.getenv("EXA_API_KEY")
+OPENAI_API_KEY = "put_somethinig_here"  # Your actual key
+EXA_API_KEY = "put_somethinig_here"  # Your actual key
 
 # Exa API settings
 EXA_SEARCH_URL = "https://api.exa.ai/search"
