@@ -27,8 +27,8 @@ Compare the following two texts. Identify any **explicit contradictions between 
 ✅ If no contradictions are found, respond with: "No contradictions found."
 
 For example
-['- Contradiction: The claim about the D-Notice.\n  - Text 1: "The producers allege that the story was prevented from being told in 1971 because of a D-Notice, to protect a prominent member of the British royal family."\n  - Text 2: "There have been several rumours connected with the burglary, including one that the government issued a D-Notice to censor the press... There is no evidence to support these claims and they have been widely dismissed."'
- '- Contradiction: The claim about the film\'s inspiration.\n  - Text 1: "According to the producers, this film is intended to reveal the truth for the first time, although it apparently includes significant elements of fiction."\n  - Text 2: "Some of the rumours inspired the story for the 2008 film The Bank Job."']
+['- Contradiction: The claim about the D-Notice.\n  - "The producers allege that the story was prevented from being told in 1971 because of a D-Notice, to protect a prominent member of the British royal family."\n  "There have been several rumours connected with the burglary, including one that the government issued a D-Notice to censor the press... There is no evidence to support these claims and they have been widely dismissed."'
+ '- Contradiction: The claim about the film\'s inspiration.\n  "According to the producers, this film is intended to reveal the truth for the first time, although it apparently includes significant elements of fiction."\n   "Some of the rumours inspired the story for the 2008 film The Bank Job."']
 Text 1:
 {text1.strip()}
 
