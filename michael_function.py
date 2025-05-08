@@ -91,7 +91,6 @@ def fetch_and_summarize(url):
         article_text = trafilatura.extract(response.text)
 
         if not article_text or len(article_text.strip()) < 100:
-            print('hey237593')
             return "Summary invalid"
 
         # Ask GPT to summarize
@@ -113,13 +112,11 @@ Article:
 
          #Check if the response is a valid summary
         if not check_if_summary(summary):
-            print("hey2: detected invalid summary")
             return "Summary invalid"
 
         return summary
 
     except Exception as e:
-        #print(f"hey3: error during fetch/summarize - {e}")
         return "Summary invalid"
 
 
@@ -162,7 +159,6 @@ def search_exa(query, num_results=8):
     for r in results:
         if any(domain in r["url"] for domain in REPUTABLE_DOMAINS):
             try:
-                print(r)
                 summary = fetch_and_summarize(r["url"])
                 if summary == "Summary invalid":
                     continue
