@@ -192,10 +192,23 @@ def search_exa(query, num_results=8):
 
 def investigate_contradiction(contradiction_list):
     all_articles = []
-    seen_articles = set()  # to store unique article identifiers (e.g., URLs)
+    seen_articles = set()  # To store unique article identifiers (e.g., URLs)
 
-    for contradiction_text in contradiction_list:
-        claims = extract_claims(contradiction_text)
+    for contradiction_item in contradiction_list:
+        language_code = contradiction_item[0]  # 'Fr' or 'De'
+        url = contradiction_item[1]  # URL of the article
+        contradiction_text = contradiction_item[2]  # Contradiction description
+        text1_and_2 = contradiction_item[3].split('\n')  # Split the two texts
+
+        if len(text1_and_2) < 2:
+            continue  # Skip if there aren't two texts to compare
+
+        # Extract the two texts
+        text_1 = text1_and_2[0].replace("- Text 1: ", "").strip()
+        text_2 = text1_and_2[1].replace("- Text 2: ", "").strip()
+
+        # Extract claims for further investigation
+        claims = extract_claims(f"Contradiction: {contradiction_text} - Text 1: {text_1} - Text 2: {text_2}")
         if not claims:
             continue
 
@@ -203,22 +216,24 @@ def investigate_contradiction(contradiction_list):
         articles_1 = search_exa(claims["claim_1"])
         articles_2 = search_exa(claims["claim_2"])
 
-        # Combine and filter articles by uniqueness
+        # Combine and filter articles by uniqueness for each contradiction
+        contradiction_results = []
+
         for article in articles_1 + articles_2:
             article_id = article.get("url") or article.get("id")  # use a unique key
             if article_id and article_id not in seen_articles:
                 seen_articles.add(article_id)
-                all_articles.append(article)
+                article["contradiction"] = contradiction_text  # Add contradiction context
+                contradiction_results.append(article)
+
+        all_articles.append(contradiction_results)
 
     return all_articles
 
 
 # === Example test ===
 if __name__ == "__main__":
-    contradiction_input = [
-        'Fruits are good for you',
-        'Fruits are bad for you'
-    ]
+    contradiction_input = [['Fr', 'https://fr.wikipedia.org/wiki/Exemple_Article', '- Contradiction: Duration of the war.', '- Text 1: "The war began in 1947 and lasted for 2 years."\n  - Text 2: "The war began in 1947 and lasted for 4 years."'], ['Fr', 'https://fr.wikipedia.org/wiki/Exemple_Article', '- Contradiction: Year the treaty was signed.', '- Text 1: "The treaty was signed in 1949."\n  - Text 2: "The treaty was signed in 1951."'], ['De', 'https://de.wikipedia.org/wiki/Beispiel_Artikel', '- Contradiction: The start year of the war.', '- Text 1: "The war began in 1947"\n  - Text 2: "The conflict started in 1946"'], ['De', 'https://de.wikipedia.org/wiki/Beispiel_Artikel', '- Contradiction: The duration of the war.', '- Text 1: "lasted for 2 years"\n  - Text 2: "lasted 3 years"']]
 
     results = investigate_contradiction(contradiction_input)
     print(results)
