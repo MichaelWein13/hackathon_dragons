@@ -40,14 +40,17 @@ def tals_function(url, max_tokens=1500):
         else:
             article_text_in_lang, lang_url = fetch_wiki_full_text_given_page(original_language_page.langlinks.get(lang))
 
+        # Limit the article text to max_tokens (before translation)
+        trimmed_article_text = ' '.join(article_text_in_lang.split()[:max_tokens])
+
         wiki_urls[lang] = lang_url
 
         if lang == "en":
-            article_text_in_english = article_text_in_lang
+            article_text_in_english = trimmed_article_text
         else:
-            article_text_in_english = translate_text(article_text_in_lang, lang, "en")
+            article_text_in_english = translate_text(trimmed_article_text, lang, "en")
 
-        # Limit to max_tokens (approximated as words)
+        # Limit to max_tokens (after translation)
         trimmed_text = ' '.join(article_text_in_english.split()[:max_tokens])
         wiki_articles_in_english[lang] = trimmed_text
 
@@ -56,7 +59,11 @@ def tals_function(url, max_tokens=1500):
 
 if __name__ == '__main__':
     original_language, wiki_articles_in_english, wiki_urls = tals_function(
-        "https://en.wikipedia.org/wiki/Six-Day_War",
+        "https://en.wikipedia.org/wiki/Jerusalem",
         max_tokens=500  # Adjust this number as needed
     )
+    # Print the results
+    #print("Original Language:", original_language)
+    #print("Wiki Articles in English:", wiki_articles_in_english)
+    #print("Wiki URLs:", wiki_urls)
     pass
