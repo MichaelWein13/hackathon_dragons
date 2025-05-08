@@ -16,12 +16,12 @@ def fetch_wiki_full_text(article_name: str, article_language:str) -> str:
         print(f"Article '{article_name}' does not exist (this error comes from the script: fetch_wiki_articles.py).")
         return None
 
-    return page.text
+    return page.text, page.fullurl
 
 def main():
     wiki_article_name = "Six-Day_War"
     print(f"Fetching article: {wiki_article_name}")
-    article_text = fetch_wiki_full_text(wiki_article_name, "en")
+    article_text, url = fetch_wiki_full_text(wiki_article_name, "en")
     print(article_text)
 
 if __name__ == '__main__':
