@@ -1,5 +1,32 @@
-# To be written at end of Hackathon 
-Notes:
-1. Example terminal line that will run the thing for you - (base) michaelwein@Michaels-MacBook-Air-4 hackathon_dragons % python -m demos.demo
-2. Replace api key in demo with actual api key, but when pushing changes to github, change it back or the key will stop working.
+# 🌐 MultiWikiCheck: Detecting Cross-Language Discrepancies on Wikipedia
+
+**MultiWikiCheck** is a Chrome extension that analyzes Wikipedia articles across multiple languages to uncover contradictions and missing information. By translating and comparing different language versions of the same article, it helps surface underreported perspectives or facts that may otherwise remain hidden due to language barriers.
+
+## 🚨 The Problem
+
+Wikipedia is an invaluable knowledge resource, but the content of articles often varies significantly between languages. These discrepancies can lead to:
+
+- Contradictory claims in different versions of the same article
+- Missing facts or underreported viewpoints
+- Biased understanding, especially for users who access content in only one language
+- This tool aims to expose these inconsistencies to promote a more complete and balanced understanding of any given topic.
+
+## ✅ Our Solution
+
+MultiWikiCheck automates the process of comparing Wikipedia articles across languages by:
+
+- Translating articles into a common language
+- Aligning sections and sentences across versions
+- Detecting contradictions, omissions, or inconsistencies
+- Suggesting related sources or articles to help users explore flagged issues further
+
+## 🧠 Technical Overview
+
+The core of **MultiWikiCheck** is a multilingual analysis pipeline that performs the following steps:
+
+1. **Data Collection**: Fetch articles on the same topic in different languages using the Wikipedia API.
+2. **Translation & Normalization**: Translate all content into a pivot language (e.g., English) using a translation model or API.
+3. **Semantic Alignment**: Match sentences and sections across versions using NLP techniques (e.g., sentence embedding, similarity scoring).
+4. **Discrepancy Detection**: Identify contradictions and missing information using rule-based and ML models.
+5. **Source Recommendation**: When inconsistencies are found, suggest other articles or sources that cover those gaps.
 
