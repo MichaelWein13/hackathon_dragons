@@ -8,23 +8,23 @@ from translate_text import translate_text
 languages = ["he", "ar", "en"]
 
 def split_utl(url):
-    # return the article tile and the language
+    # return the article title and the language
     # Example URL: https://en.wikipedia.org/wiki/Six-Day_War
 
     # Split the URL by '/' and extract the relevant parts
     parts = url.split('/')
-    # The article title is the last part of the URL
     article_title = parts[-1]
-    # The language is the second part of the URL
     language = parts[2].split('.')[0]  # Remove the '.org' part
 
     return article_title, language
 
-def tals_function(url):
+def tals_function(url, max_tokens=1500):
     """
-    This function takes a Wikipedia URL, extracts the articles and translates them into english.
-    :param url: the wikipedia URL
-    :return: the original language, the articles in english and the urls of the articles
+    This function takes a Wikipedia URL, extracts the articles and translates them into English.
+    If any article exceeds `max_tokens`, it is truncated.
+    :param url: the Wikipedia URL
+    :param max_tokens: the maximum number of tokens to retain from each article
+    :return: the original language, the articles in English, and the URLs of the articles
     """
     article_title, original_language = split_utl(url)
     original_language_page = None
@@ -32,7 +32,6 @@ def tals_function(url):
     wiki_articles_in_english = {}
     wiki_urls = {}
 
-    # Reorder languages to start with the original language
     modified_languages = [original_language] + [lang for lang in languages if lang != original_language]
     for lang in tqdm(modified_languages):
         if lang == original_language:
@@ -48,14 +47,16 @@ def tals_function(url):
         else:
             article_text_in_english = translate_text(article_text_in_lang, lang, "en")
 
-        wiki_articles_in_english[lang] = article_text_in_english
+        # Limit to max_tokens (approximated as words)
+        trimmed_text = ' '.join(article_text_in_english.split()[:max_tokens])
+        wiki_articles_in_english[lang] = trimmed_text
 
     return original_language, wiki_articles_in_english, wiki_urls
 
 
 if __name__ == '__main__':
-    original_language, wiki_articles_in_english, wiki_urls = tals_function("https://en.wikipedia.org/wiki/Six-Day_War")
+    original_language, wiki_articles_in_english, wiki_urls = tals_function(
+        "https://en.wikipedia.org/wiki/Six-Day_War",
+        max_tokens=500  # Adjust this number as needed
+    )
     pass
-
-
-
