@@ -29,5 +29,7 @@ def main():
     print(f"Original: {text_to_translate}")
     print(f"Translated: {translated_text}")
 
+
+
 if __name__ == '__main__':
     main()
