@@ -1,4 +1,4 @@
-# 🌐 MultiWikiCheck: Detecting Cross-Language Discrepancies on Wikipedia
+# 🌐 WikiCheck: Detecting Cross-Language Discrepancies on Wikipedia
 
 **MultiWikiCheck** is a Chrome extension that analyzes Wikipedia articles across multiple languages to uncover contradictions and missing information. By translating and comparing different language versions of the same article, it helps surface underreported perspectives or facts that may otherwise remain hidden due to language barriers.
 
